@@ -5,6 +5,10 @@
 A simple tool which copies the `selectedArrangementID` from songs to the playlist within a pro6plx file and opens it in
 ProPresenter 6.
 
+![Screenshot Windows](screenshots/windows.png)
+
+![Screenshot MacOS](screenshots/macos.png)
+
 ## How to use
 There are multiple ways to use the tool.
 
