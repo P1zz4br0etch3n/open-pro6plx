@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "OpenPlaylist"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "open-pro6plx"))
         self.label.setText(_translate("MainWindow", "Playlist"))
         self.pushButton.setText(_translate("MainWindow", "Browse"))
         self.pushButton_2.setText(_translate("MainWindow", "Open"))
