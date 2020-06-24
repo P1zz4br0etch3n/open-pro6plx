@@ -41,7 +41,7 @@ def open_playlist(path_to_playlist):
 
 def quickstart():
     path_to_playlist = sys.argv[1] if len(sys.argv) > 1 else None
-    if path_to_playlist:
+    if path_to_playlist and os.path.exists(path_to_playlist):
         open_playlist(path_to_playlist)
         window.close()
 
