@@ -1,0 +1,43 @@
+name: Create Pre-Release
+
+on: 
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    name: Build & Create Release & Upload Asset
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            installer: 'target/open-pro6plxSetup.exe'
+            artifact: 'open-pro6plx_win_x64_setup.exe'
+          - os: macos-latest
+            installer: 'target/open-pro6plx.dmg'
+            artifact: 'open-pro6plx_mac_x64.dmg'
+    steps:
+      - name: Install NSIS
+        uses: crazy-max/ghaction-chocolatey@v1.1.0
+        with:
+          args: install nsis
+        if: matrix.os == 'windows-latest'
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.5'
+      - name: Build project
+        run: |
+          pip install -r requirements.txt && fbs freeze && fbs installer && mv ${{ matrix.installer }} ${{ matrix.artifact }}
+        shell: bash
+      - name: Create Release & Upload binary
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
+          artifacts: ${{ matrix.artifact }}

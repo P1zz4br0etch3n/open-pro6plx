@@ -1,0 +1,8 @@
+*.log
+.idea/
+*.iml
+venv/
+*.pro6plx
+*.dll
+target/
+*.pptx
