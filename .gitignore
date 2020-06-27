@@ -6,3 +6,4 @@ venv/
 *.dll
 target/
 *.pptx
+*.pyc

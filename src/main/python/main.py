@@ -3,8 +3,9 @@ import subprocess
 import sys
 
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QEvent
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
-from PyQt5.QtWidgets import QMainWindow, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QApplication
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from fbs_runtime.platform import is_windows, is_mac
 
@@ -39,8 +40,8 @@ def open_playlist(path_to_playlist):
         subprocess.Popen([path_to_propresenter, path_to_playlist])
 
 
-def quickstart():
-    path_to_playlist = sys.argv[1] if len(sys.argv) > 1 else None
+def quickstart(path=None):
+    path_to_playlist = path or (sys.argv[1] if len(sys.argv) > 1 else None)
     if path_to_playlist and os.path.exists(path_to_playlist):
         open_playlist(path_to_playlist)
         window.close()
@@ -65,16 +66,30 @@ def enable_file_drag(line_edit: QLineEdit) -> None:
     line_edit.dropEvent = drop_event
 
 
+def enable_open_with():
+    def event(e: QEvent) -> bool:
+        if e.type() == QEvent.FileOpen:
+            quickstart(e.file())
+        return QApplication.event(appctxt.app, e)
+
+    appctxt.app.event = event
+
+
 if __name__ == '__main__':
 
     appctxt = ApplicationContext()  # 1. Instantiate ApplicationContext
+
+    if is_mac():
+        enable_open_with()
+
     window = MainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(window)
     enable_file_drag(ui.lineEdit)
     window.show()
 
-    quickstart()
+    if is_windows():
+        quickstart()
 
     exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
