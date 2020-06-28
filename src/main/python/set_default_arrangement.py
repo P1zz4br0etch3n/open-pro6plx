@@ -1,7 +1,10 @@
 import argparse
 import io
+import logging
 from xml.etree import ElementTree
 from zipfile import ZipFile
+
+logger = logging.getLogger()
 
 
 def set_default_arrangements(path_to_playlist: str):
@@ -25,7 +28,7 @@ def set_default_arrangements(path_to_playlist: str):
                 song_arrangement_id = song_xml.get('selectedArrangementID')
                 document.set('selectedArrangementID', song_arrangement_id)
             except KeyError:
-                print("Song %s is not included in file." % song_path)
+                logger.info("Song %s is not included in file." % song_path)
 
     with ZipFile(path_to_playlist, 'w') as zip_file:
         file_buffer = io.BytesIO()

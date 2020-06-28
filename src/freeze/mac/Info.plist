@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist>
+    <dict>
+        <key>CFBundleExecutable</key>
+        <string>${app_name}</string>
+        <key>CFBundleDisplayName</key>
+        <string>${app_name}</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleIconFile</key>
+        <string>Icon.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>${mac_bundle_identifier}</string>
+        <key>LSBackgroundOnly</key>
+        <string>0</string>
+        <key>CFBundleShortVersionString</key>
+        <string>${version}</string>
+        <key>CFBundleVersion</key>
+        <string>${version}</string>
+        <key>CFBundleName</key>
+        <string>${app_name}</string>
+        <key>CFBundleTypeExtensions</key>         <!-- Declare which extensions to associate with -->
+        <array>
+            <string>pro6plx</string>
+        </array>
+        <key>CFBundleTypeName</key>               <!-- Declare name to associate with these extensions -->
+        <string>ProPresenter 6 Playlist Files</string>
+        <key>CFBundleTypeRole</key>               <!-- Declare role that program plays when opening file -->
+        <string>Modifier</string>
+        <key>NSPrincipalClass</key>               <!-- Enable Retina support on OS X: -->
+        <string>NSApplication</string>
+    </dict>
+</plist>

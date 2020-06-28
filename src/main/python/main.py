@@ -1,3 +1,4 @@
+import logging
 import os
 import subprocess
 import sys
@@ -13,6 +14,14 @@ from gui.open_playlist import Ui_MainWindow
 from set_default_arrangement import set_default_arrangements
 
 DETACHED_PROCESS = 8
+
+if is_windows():
+    log_filename = 'C:\\ProgramData\\open-pro6plx\\debug.log'
+else:
+    log_filename = '/var/log/open-pro6plx/debug.log'
+logging.basicConfig(filename=log_filename, filemode='a', level=logging.INFO)
+
+logger = logging.getLogger()
 
 
 class MainWindow(QMainWindow):
@@ -31,20 +40,30 @@ class MainWindow(QMainWindow):
 
 
 def open_playlist(path_to_playlist):
-    set_default_arrangements(path_to_playlist)
-    if is_windows():
-        path_to_propresenter = "C:\\Program Files (x86)\\Renewed Vision\\ProPresenter 6\\ProPresenter.exe"
-        subprocess.Popen([path_to_propresenter, path_to_playlist], creationflags=DETACHED_PROCESS)
-    elif is_mac():
-        path_to_propresenter = "/Applications/ProPresenter 6.app"
-        subprocess.Popen([path_to_propresenter, path_to_playlist])
+    try:
+        set_default_arrangements(path_to_playlist)
+    except Exception as e:
+        logger.error("open_playlist - Cannot set default arrangements: %s" % str(e))
+
+    try:
+        if is_windows():
+            path_to_propresenter = "C:\\Program Files (x86)\\Renewed Vision\\ProPresenter 6\\ProPresenter.exe"
+            subprocess.Popen([path_to_propresenter, path_to_playlist], creationflags=DETACHED_PROCESS)
+        elif is_mac():
+            path_to_propresenter = "/Applications/ProPresenter 6.app"
+            subprocess.Popen([path_to_propresenter, path_to_playlist])
+    except Exception as e:
+        logger.error('open_playlist - Cannot open playlist: %s' % str(e))
 
 
 def quickstart(path=None):
     path_to_playlist = path or (sys.argv[1] if len(sys.argv) > 1 else None)
+    logger.info('quickstart - path_to_playlist is %s' % path_to_playlist)
     if path_to_playlist and os.path.exists(path_to_playlist):
         open_playlist(path_to_playlist)
         window.close()
+    else:
+        logger.error('quickstart - No path or path not valid.')
 
 
 def enable_file_drag(line_edit: QLineEdit) -> None:
