@@ -2,6 +2,7 @@ import logging
 import os
 import subprocess
 import sys
+from os.path import expanduser
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QEvent
@@ -15,10 +16,13 @@ from set_default_arrangement import set_default_arrangements
 
 DETACHED_PROCESS = 8
 
+home = expanduser('~')
 if is_windows():
-    log_filename = 'C:\\ProgramData\\open-pro6plx\\debug.log'
+    log_filepath = os.path.join(home, 'AppData\\Local\\open-pro6plx')
 else:
-    log_filename = '/var/log/open-pro6plx/debug.log'
+    log_filepath = os.path.join(home, 'Library/Logs/open-pro6plx')
+os.makedirs(log_filepath, exist_ok=True)
+log_filename = os.path.join(log_filepath, 'debug.log')
 logging.basicConfig(filename=log_filename, filemode='a', level=logging.INFO)
 
 logger = logging.getLogger()
@@ -40,6 +44,8 @@ class MainWindow(QMainWindow):
 
 
 def open_playlist(path_to_playlist):
+    logger.info('open_playlist...')
+
     try:
         set_default_arrangements(path_to_playlist)
     except Exception as e:
@@ -57,6 +63,7 @@ def open_playlist(path_to_playlist):
 
 
 def quickstart(path=None):
+    logger.info('quickstart...')
     path_to_playlist = path or (sys.argv[1] if len(sys.argv) > 1 else None)
     logger.info('quickstart - path_to_playlist is %s' % path_to_playlist)
     if path_to_playlist and os.path.exists(path_to_playlist):
@@ -67,6 +74,8 @@ def quickstart(path=None):
 
 
 def enable_file_drag(line_edit: QLineEdit) -> None:
+    logger.info('enable_file_drag...')
+
     line_edit.setDragEnabled(True)
 
     def drag_enter_event(event: QDragEnterEvent) -> None:
@@ -86,6 +95,8 @@ def enable_file_drag(line_edit: QLineEdit) -> None:
 
 
 def enable_open_with():
+    logger.info('enable_open_with...')
+
     def event(e: QEvent) -> bool:
         if e.type() == QEvent.FileOpen:
             quickstart(e.file())
@@ -95,7 +106,7 @@ def enable_open_with():
 
 
 if __name__ == '__main__':
-
+    logger.info('open-pro6plx started.')
     appctxt = ApplicationContext()  # 1. Instantiate ApplicationContext
 
     if is_mac():
@@ -111,4 +122,5 @@ if __name__ == '__main__':
         quickstart()
 
     exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
+    logger.info('open-pro6plx closed with exit code %s' % exit_code)
     sys.exit(exit_code)
