@@ -22,14 +22,19 @@
         <string>${version}</string>
         <key>CFBundleName</key>
         <string>${app_name}</string>
-        <key>CFBundleTypeExtensions</key>         <!-- Declare which extensions to associate with -->
+        <key>CFBundleDocumentTypes</key>              <!-- Declare that program associates filetypes -->
         <array>
-            <string>pro6plx</string>
+            <dict>
+                <key>CFBundleTypeExtensions</key>         <!-- Declare which extensions to associate with -->
+                <array>
+                    <string>pro6plx</string>
+                </array>
+                <key>CFBundleTypeName</key>               <!-- Declare name to associate with these extensions -->
+                <string>ProPresenter6 Playlist Bundles</string>
+                <key>CFBundleTypeRole</key>               <!-- Declare role that program plays when opening file -->
+                <string>Editor</string>
+            </dict>
         </array>
-        <key>CFBundleTypeName</key>               <!-- Declare name to associate with these extensions -->
-        <string>ProPresenter 6 Playlist Files</string>
-        <key>CFBundleTypeRole</key>               <!-- Declare role that program plays when opening file -->
-        <string>Modifier</string>
         <key>NSPrincipalClass</key>               <!-- Enable Retina support on OS X: -->
         <string>NSApplication</string>
     </dict>
