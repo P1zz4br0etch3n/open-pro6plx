@@ -98,7 +98,7 @@ def enable_open_with():
     logger.info('enable_open_with...')
 
     def event(e: QEvent) -> bool:
-        logger.info('event - FileOpen event detected.')
+        logger.info('event - Event of type %s detected.' % e.type())
         if e.type() == QEvent.FileOpen:
             logger.info('event - file path is %s' % e.file())
             quickstart(e.file())
