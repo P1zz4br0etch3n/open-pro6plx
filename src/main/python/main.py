@@ -2,12 +2,15 @@ import logging
 import os
 import subprocess
 import sys
+from abc import ABC
 from os.path import expanduser
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QEvent
-from PyQt5.QtGui import QDragEnterEvent, QDropEvent
+from PyQt5.QtGui import QDragEnterEvent, QDropEvent, QIcon
+from PyQt5.QtNetwork import QAbstractSocket
 from PyQt5.QtWidgets import QMainWindow, QLineEdit, QApplication
+from fbs_runtime.application_context import cached_property, _QtBinding
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from fbs_runtime.platform import is_windows, is_mac
 
@@ -94,25 +97,32 @@ def enable_file_drag(line_edit: QLineEdit) -> None:
     line_edit.dropEvent = drop_event
 
 
-def enable_open_with():
-    logger.info('enable_open_with...')
+class MacApplicationContext(ApplicationContext, ABC):
+    @cached_property
+    def _qt_binding(self):
+        return _QtBinding(MacApp, QIcon, QAbstractSocket)
 
-    def event(e: QEvent) -> bool:
+
+class MacApp(QApplication):
+    def event(self, e: QEvent) -> bool:
         logger.info('event - Event of type %s detected.' % e.type())
         if e.type() == QEvent.FileOpen:
-            logger.info('event - file path is %s' % e.file())
-            quickstart(e.file())
+            file = e.file()
+            logger.info('event - file path is %s' % file)
+            if str(file).endswith('.pro6plx'):
+                quickstart(file)
         return QApplication.event(appctxt.app, e)
-
-    appctxt.app.event = event
 
 
 if __name__ == '__main__':
     logger.info('open-pro6plx started.')
-    appctxt = ApplicationContext()  # 1. Instantiate ApplicationContext
 
     if is_mac():
-        enable_open_with()
+        logger.info('Using MacApplicationContext')
+        appctxt = MacApplicationContext()
+    else:
+        logger.info('Using ApplicationContext')
+        appctxt = ApplicationContext()
 
     window = MainWindow()
     ui = Ui_MainWindow()

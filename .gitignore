@@ -7,3 +7,5 @@ venv/
 target/
 *.pptx
 *.pyc
+.vscode/
+__pycache__/

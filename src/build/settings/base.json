@@ -2,5 +2,5 @@
     "app_name": "open-pro6plx",
     "author": "Aron",
     "main_module": "src/main/python/main.py",
-    "version": "0.0.5"
+    "version": "0.0.6"
 }

@@ -1,6 +1,3 @@
 {
-    "mac_bundle_identifier": "com.aron.open-pro6plx",
-    "files_to_filter": [
-        "src/freeze/mac/Contents/Info.plist"
-    ]
+    "mac_bundle_identifier": "com.aron.open-pro6plx"
 }
