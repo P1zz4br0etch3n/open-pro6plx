@@ -2,8 +2,7 @@
 
 # open-pro6plx
 
-A simple tool which copies the `selectedArrangementID` from songs to the playlist within a pro6plx file and opens it in
-ProPresenter 6.
+Open ProPresenter 6 Playlist Bundle Files copying the `selectedArrangementID` from included songs to playlist entries.
 
 ![Screenshot Windows](screenshots/windows.png)
 
