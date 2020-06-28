@@ -5,9 +5,8 @@ import sys
 from os.path import expanduser
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QEvent
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from fbs_runtime.platform import is_windows, is_mac
 
@@ -94,23 +93,9 @@ def enable_file_drag(line_edit: QLineEdit) -> None:
     line_edit.dropEvent = drop_event
 
 
-def enable_open_with():
-    logger.info('enable_open_with...')
-
-    def event(e: QEvent) -> bool:
-        if e.type() == QEvent.FileOpen:
-            quickstart(e.file())
-        return QApplication.event(appctxt.app, e)
-
-    appctxt.app.event = event
-
-
 if __name__ == '__main__':
     logger.info('open-pro6plx started.')
     appctxt = ApplicationContext()  # 1. Instantiate ApplicationContext
-
-    if is_mac():
-        enable_open_with()
 
     window = MainWindow()
     ui = Ui_MainWindow()
@@ -118,8 +103,7 @@ if __name__ == '__main__':
     enable_file_drag(ui.lineEdit)
     window.show()
 
-    if is_windows():
-        quickstart()
+    quickstart()
 
     exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
     logger.info('open-pro6plx closed with exit code %s' % exit_code)
