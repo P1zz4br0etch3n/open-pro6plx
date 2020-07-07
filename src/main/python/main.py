@@ -59,8 +59,8 @@ def open_playlist(path_to_playlist):
             path_to_propresenter = "C:\\Program Files (x86)\\Renewed Vision\\ProPresenter 6\\ProPresenter.exe"
             subprocess.Popen([path_to_propresenter, path_to_playlist], creationflags=DETACHED_PROCESS)
         elif is_mac():
-            path_to_propresenter = '"/Applications/ProPresenter 6.app"'
-            subprocess.Popen([path_to_propresenter, path_to_playlist], shell=True)
+            path_to_propresenter = '/Applications/ProPresenter 6.app'
+            subprocess.Popen(['open', '-a', path_to_propresenter, path_to_playlist])
     except Exception as e:
         logger.error('open_playlist - Cannot open playlist: %s' % str(e))
 
